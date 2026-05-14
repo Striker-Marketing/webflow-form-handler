@@ -281,12 +281,16 @@ const handleForm = ({
       let field = form.querySelector(`[name='${fieldName}']`);
       if (fieldType == "file") {
         const allowedExt = ["doc", "docx", "txt", "pdf", "jpg", "jpeg", "png"];
-        const ext = field.files[0].name.split(".").pop().toLowerCase();
-        if (!allowedExt.includes(ext)) {
-          alert("File type not supported.");
-          throw new Error("File type not supported.");
+        for (const file of field.files) {
+          const ext = file.name.split(".").pop().toLowerCase();
+          if (!allowedExt.includes(ext)) {
+            alert("File type not supported.");
+            throw new Error("File type not supported.");
+          }
         }
-        formData.append(fieldId, field.files[0], field.files[0].name);
+        field.files.forEach(file=>{
+          formData.append(fieldId, file, file.name);
+        })
         return;
       }
       if (field?.type === "radio") {
