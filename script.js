@@ -287,10 +287,8 @@ const handleForm = ({
             alert("File type not supported.");
             throw new Error("File type not supported.");
           }
-        }
-        field.files.forEach(file=>{
           formData.append(fieldId, file, file.name);
-        })
+        }
         return;
       }
       if (field?.type === "radio") {
