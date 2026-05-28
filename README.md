@@ -21,7 +21,7 @@ The phone input must have `name="phone_number"`.
 ### Loading the handler
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/Bucked-Up/webflow-form-handler@2/script.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Striker-Marketing/webflow-form-handler@1/script.min.js"></script>
 <script>
   handleForm({
     formId: "",
