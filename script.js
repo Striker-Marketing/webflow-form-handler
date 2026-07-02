@@ -12,20 +12,6 @@ const handleForm = ({
   custom = { customFunc: undefined, hasCaptcha: undefined },
   submitFunction = () => {},
 }) => {
-  const trySentry = ({ error, message }) => {
-    try {
-      if (error) {
-        Sentry.captureException(error);
-      } else {
-        const sentryError = new Error();
-        sentryError.name = "Error";
-        sentryError.message = message;
-        Sentry.captureException(sentryError);
-      }
-    } catch (e) {
-      console.error("Error loading sentry.");
-    }
-  };
 
   const getTopLevelDomain = () => {
     const fullDomain = window.location.hostname;
