@@ -291,12 +291,28 @@ const handleForm = ({
     });
     body.formId = ghl.formId;
     body.location_id = ghl.location_id;
-    body.eventData = {};
-    body.eventData.url_params = Object.fromEntries(urlParams.entries());
-    body.eventData.campaign = urlParams.get("utm_campaign") || urlParams.get("gad_campaignid");
-    body.eventData.page = {};
-    body.eventData.page.url = window.location.href;
-    body.eventData.page.title = document.title;
+    const getCookie = (name) => document.cookie.split(`${name}=`)[1]?.split(";")[0] || "";
+    const adSourceMap = { gclid: "google", fbclid: "facebook", ttclid: "tiktok", msclkid: "bing", tbclid: "taboola" };
+    const adSourceKey = Object.keys(adSourceMap).find((k) => urlParams.get(k)) ?? "";
+    const fbclid = urlParams.get("fbclid");
+    const fbc = getCookie("_fbc") || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : "");
+    body.eventData = {
+      referrer: document.referrer,
+      keyword: urlParams.get("utm_term") || "",
+      adSource: adSourceKey ? adSourceMap[adSourceKey] : "",
+      url_params: Object.fromEntries(urlParams.entries()),
+      page: { url: window.location.href, title: document.title },
+      timestamp: Date.now(),
+      campaign: urlParams.get("utm_campaign") || urlParams.get("gad_campaignid"),
+      fbp: getCookie("_fbp"),
+      fbc,
+      domain: window.location.hostname,
+      documentURL: window.location.href,
+      gaClientId: getCookie("_ga"),
+      fbEventId: crypto.randomUUID(),
+      medium: "form",
+      mediumId: ghl.formId,
+    };
     formData.append("formData", JSON.stringify(body));
     formData.append("locationId", ghl.location_id);
     formData.append("formId", ghl.formId);
